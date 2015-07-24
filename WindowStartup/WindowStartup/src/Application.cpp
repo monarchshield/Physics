@@ -62,8 +62,30 @@ Application::Application()
 
 
 	m_skybox = new Skybox();
-	m_RigidSphere = new RigidBody(vec3(0, 14, 0), vec3(.5f, 0, 0), 2, 10);
-	m_RigidSphere->SetTimeStep(.0001f);
+	//m_RigidSphere = new RigidBody(vec3(0, 14, 0), vec3(.5f, 0, 0), 2, 10);
+	//m_RigidSphere1 = new RigidBody(vec3(0, 14, 0), vec3(0, 0, 0), 2, 10);
+	
+	m_rigidbodies.push_back(new RigidBody(vec3(0, 14, 0), vec3(.5f, 0, 0), 2, 10));
+	m_rigidbodies[0]->SetID(0);
+
+	m_rigidbodies.push_back(new RigidBody(vec3(100, 14, 0), vec3(0, 0, 0), 2, 10));
+	m_rigidbodies[1]->SetID(1);
+
+
+	for (unsigned int i = 0; i < m_rigidbodies.size(); i++)
+	{
+		m_rigidbodies[i]->SetTimeStep(.1f);
+
+
+
+		if (i = 1)
+			m_rigidbodies[i]->SetColour(vec4(0, 1, 0, 1));
+	}
+
+
+
+	//m_RigidSphere->SetTimeStep(.5f);
+	//m_RigidSphere1->SetTimeStep(.5f);
 
 	Gizmos::create();
 	
@@ -74,6 +96,8 @@ Application::Application()
 	{
 		m_entities.push_back(new Entity(vec3(0, 15, 0), 10));
 	}
+
+	//boy do I like to eat some fresh penguin
 
 	glfwSetMouseButtonCallback(window, OnMouseButton);
 	glfwSetCursorPosCallback(window, OnMousePosition);
@@ -155,7 +179,24 @@ void Application::Update()
 	//	m_physics->MakeBlocks();
 	//	
 	//}
-	m_RigidSphere->Update(m_DeltaTime);
+
+	for (unsigned int i = 0; i < m_rigidbodies.size(); i++)
+	{
+		m_rigidbodies[i]->Update(m_DeltaTime);
+
+		for (unsigned int j = 0; j < m_rigidbodies.size(); j++)
+		{
+			if (i == j)
+				break;
+		
+			else
+				m_rigidbodies[i]->CheckCollision(m_rigidbodies[j]);
+		}
+
+	}
+
+
+	//m_RigidSphere->Update(m_DeltaTime);
 	//m_physics->Update(m_DeltaTime);
 
 	camera->update(m_DeltaTime);
@@ -168,7 +209,12 @@ void Application::Draw()
 	Gizmos::clear();
 	Gizmos::addAABBFilled(vec3(0,2,0), vec3(250, 1, 250), vec4(0, 0, 1, 1), nullptr);
 	//Gizmos::addAABB(vec3(0, 35, 0), vec3(15, 15, 15), vec4(0, 1, 0, 1), nullptr);
-	m_RigidSphere->Draw();
+	//m_RigidSphere->Draw();
+
+	for (unsigned int i = 0; i < m_rigidbodies.size(); i++)
+	{
+		m_rigidbodies[i]->Draw();
+	}
 
 
 	//m_physics->Draw();

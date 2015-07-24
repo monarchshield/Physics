@@ -50,9 +50,12 @@ private:
 	float m_DeltaTime;
 	float m_cooldown;
 
-	RigidBody* m_RigidSphere;
-	
 
+	RigidBody* m_RigidSphere;
+	RigidBody* m_RigidSphere1;
+
+
+	std::vector<RigidBody*> m_rigidbodies;
 	std::vector<Entity*> m_entities;
 	
 	int m_vertexCount;

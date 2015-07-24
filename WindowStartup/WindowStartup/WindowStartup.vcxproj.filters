@@ -39,10 +39,10 @@
     <ClCompile Include="src\RigidBody.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Physx1.cpp">
+    <ClCompile Include="src\Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Entity.cpp">
+    <ClCompile Include="src\Physx1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -68,10 +68,10 @@
     <ClInclude Include="header\RigidBody.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="header\Physx1.h">
+    <ClInclude Include="header\Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="header\Entity.h">
+    <ClInclude Include="header\Physx1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -43,6 +43,9 @@ public:
 	
 	//Update Loop
 	void Update(float deltatime);
+	
+	void CheckCollision(RigidBody* actor);
+
 	void debug();
 	void Draw();
 
@@ -54,6 +57,8 @@ public:
 	bool SPHEREvsPLANE(RigidBody* actor);			 //Done!
 	//--------------------------------------
 
+	//Just for debug stuff
+	void SetID(int id);
 
 	//Sets the gravity
 	void SetGravity(vec3 gravity);
@@ -67,17 +72,26 @@ public:
 	//Setter for timestep value
 	void SetTimeStep(float val);
 
+	//For Renderer Reasons
+	void SetColour(vec4 colour);
+
+
 	//Returns type functions
 	//----------------------------------------
 	vec3 GetPosition();
 	vec3 GetForce();
 	vec3 GetNormal();
+	vec3 GetVelocity();
 
 	float GetWidth();
 	float GetHeight();
 	float GetLength();
 	float GetRadius();
+	float GetMass();
 	//------------------------------------------
+	
+	vec3 m_position;
+
 private:
 	
 	ShapeType m_shapeID;
@@ -92,10 +106,14 @@ private:
 	float m_timestep;
 	//----------------------------
 
+	//Debug stuff
+	//-------------------------------
+	int m_id;
+	//-------------------------------
+
 
 	//Physics stuff
 	//-------------------------
-	vec3 m_position;
 	vec3 m_velocity;
 	vec3 m_gravity;
 	vec3 m_acceleration;
@@ -103,8 +121,12 @@ private:
 
 	vec3 m_force;
 	float m_mass;
+	float m_deltatime;
 	//-------------------------
 
+
+	//Graphics& Colour stuff
+	vec4 m_colour;
 
 
 

@@ -13,6 +13,7 @@ RigidBody::RigidBody(vec3 position, vec3 acceleration, float mass, float radius)
 	m_shapeID = ShapeType::SPHERE;
 	m_state = RigidBodyState::AWAKE;
 	m_timestep = 1.0f;
+	m_colour = vec4(1, 0, 0, 1);
 }
 
 //RigidBody AABB:
@@ -27,6 +28,7 @@ RigidBody::RigidBody(vec3 position, vec3 acceleration, float mass, float width, 
 	m_shapeID = ShapeType::BOX;
 	m_state = RigidBodyState::AWAKE;
 	m_timestep = 1.0f;
+	m_colour = vec4(1, 0, 0, 1);
 }
 
 //RigidBody Plane:
@@ -43,6 +45,7 @@ RigidBody::RigidBody(vec3 position, vec3 normal)
 	m_shapeID = ShapeType::PLANE;
 	m_state = RigidBodyState::ASLEEP;
 	m_timestep = 1.0f;
+	m_colour = vec4(1, 0, 0, 1);
 }
 
 #pragma endregion
@@ -55,6 +58,9 @@ RigidBody::~RigidBody()
 
 void RigidBody::Update(float deltatime)
 {
+
+	m_deltatime = deltatime;
+
 	m_position -= m_gravity * deltatime * m_timestep;
 	
 	
@@ -63,9 +69,9 @@ void RigidBody::Update(float deltatime)
 
 	m_velocity += m_acceleration * deltatime * m_timestep;
 
-
-
+	if (m_id == 0)
 	std::cout << "Current Velocity: " << m_velocity.x << "," << m_velocity.y << "," << m_velocity.z << "\n";
+	
 	m_position += m_velocity;
 
 
@@ -79,12 +85,19 @@ void RigidBody::debug()
 
 void RigidBody::applyForce(vec3 force)
 {
-
+	m_acceleration += force / m_mass;
+	m_velocity += m_acceleration * m_deltatime * m_timestep;
+	
 }
 
-void RigidBody::applyForceToActor(RigidBody* actor2, glm::vec3 force)
+void RigidBody::SetColour(vec4 colour)
 {
-	ShapeType _id = actor2->m_shapeID;
+	m_colour = colour;
+}
+
+void RigidBody::CheckCollision(RigidBody* actor)
+{
+	ShapeType _id = actor->m_shapeID;
 
 	switch (m_shapeID)
 	{
@@ -92,99 +105,80 @@ void RigidBody::applyForceToActor(RigidBody* actor2, glm::vec3 force)
 		{
 			switch (_id)
 			{
-				case PLANE:
-				  break;
-
-				case SPHERE:
-				  break;
-
-				case BOX:
-				  break;
-			}
-		}
-		break;
-
-		case SPHERE:
-		{
-			switch (_id)
-			{
-				case PLANE:
-					SPHEREvsPLANE(actor2);
-				   break;
-
-				case SPHERE:
-					SPHEREvsSPHERE(actor2);
-				   break;
-
-				case BOX:
-
-				   break;
-			}
-		}
-		break;
-
-		case BOX:
-		{
-			switch (_id)
-			{
 			case PLANE:
-				AABBvsPLANE(actor2);
-				break;
+			  break;
 
 			case SPHERE:
-				break;
+			  break;
 
 			case BOX:
-				AABBvsAABB(actor2);
-				break;
+			  break;
 			}
 		}
 		break;
 
-		default:
-			std::cout << "Dont recognise collison type";
+	case SPHERE:
+	{
+		 switch (_id)
+		 {
+		 case PLANE:
+		   SPHEREvsPLANE(actor);
+		   break;
+
+		 case SPHERE:
+		   SPHEREvsSPHERE(actor);
+		   break;
+
+		 case BOX:
+
+		   break;
+		 }
+	}
+		break;
+
+	case BOX:
+	{
+		switch (_id)
+		{
+		case PLANE:
+			AABBvsPLANE(actor);
 			break;
 
-			//switch (actor2->m_shapeID)
-			//{
-			//case PLANE:
-			//{
-			//	std::cout << "Colliding with: PLANE!";
-			//}
-			//	break;
-			//
-			//case SPHERE:
-			//{
-			//			   SPHEREvsSPHERE(actor2);
-			//}
-			//	break;
-			//
-			//case BOX:
-			//	std::cout << "Colliding with: AABB!";
-			//	break;
-			//
-			//case CAPSULE:
-			//	std::cout << "Colliding with: CAPSULE! doubtful!";
-			//	break;
-			//
-			//default:
-			//	std::cout << "I dont understand?";
-			//	break;
-			//}
+		case SPHERE:
+			break;
+
+		case BOX:
+			AABBvsAABB(actor);
+			break;
+		}
+	}
+		break;
+
+	default:
+		std::cout << "Dont recognise collison type";
+		break;
+
+		
 	}
 }
 
 
+void RigidBody::applyForceToActor(RigidBody* actor2, glm::vec3 force)
+{
+	applyForce(-force);
+	actor2->applyForce(force);
+	//applyForce(-force);
+}
 
 void RigidBody::Draw()
 {
 	switch (m_shapeID)
 	{
-	case PLANE: Gizmos::addAABBFilled(m_position, vec3(m_width, 1, m_length), vec4(1, 0, 0, 1), nullptr);
+	case PLANE: Gizmos::addAABBFilled(m_position, vec3(m_width, 1, m_length), m_colour, nullptr);
 		break;
-	case SPHERE: Gizmos::addSphere(m_position, m_radius, 10, 10, vec4(1, 0, 0, 1), nullptr);
+	case SPHERE: Gizmos::addSphere(m_position, m_radius, 10, 10, m_colour, nullptr);
 		break;
-	case BOX: Gizmos::addAABBFilled(m_position, vec3(m_width, m_height, m_length), vec4(1, 0, 0, 1), nullptr);
+	case BOX: Gizmos::addAABBFilled(m_position, vec3(m_width, m_height, m_length), m_colour, nullptr);
 		break;
 	case CAPSULE:
 		break;
@@ -206,14 +200,19 @@ vec3 RigidBody::GetForce()
 	return m_force;
 }
 
+vec3 RigidBody::GetNormal()
+{
+	return m_normal;
+}
+
 float RigidBody::GetRadius()
 {
 	return m_radius;
 }
 
-vec3 RigidBody::GetNormal()
+float RigidBody::GetMass()
 {
-	return m_normal;
+	return m_mass;
 }
 
 float RigidBody::GetWidth()
@@ -231,6 +230,11 @@ float RigidBody::GetLength()
 	return m_length;
 }
 
+vec3 RigidBody::GetVelocity()
+{
+	return m_velocity;
+}
+
 #pragma endregion
 
 #pragma region Set Functions()
@@ -242,6 +246,10 @@ void RigidBody::SetGravity(vec3 gravity)
 void RigidBody::SetTimeStep(float val)
 {
 	m_timestep = val;
+}
+void RigidBody::SetID(int id)
+{
+	m_id = id;
 }
 
 #pragma endregion
@@ -269,18 +277,37 @@ bool RigidBody::AABBvsAABB(RigidBody* actor)
 	{
 		//Collision has occured occured gg
 		std::cout << "Collision has occured!";
+		return true;
 	}
 
+	return false;
 }
 
 bool RigidBody::SPHEREvsSPHERE(RigidBody* actor)
 {
 	vec3 temp_length = m_position - actor->GetPosition();
-	float length = temp_length.length();
 
-	if (length < actor->GetRadius())
+	float length = glm::length(temp_length);
+
+	float intersection = m_radius + actor->GetRadius() - length;
+
+	if (length < m_radius)
 	{
-		std::cout << "Colliding with: SPHERE!";
+
+		vec3 collisionNormal = glm::normalize(temp_length);
+		vec3 relativeVelocity = m_velocity - actor->GetVelocity();
+		vec3 collisionVector = collisionNormal *(glm::dot(relativeVelocity, collisionNormal));
+		vec3 forceVector = collisionVector * 1.0f / (1 / m_mass + 1 / actor->GetMass());
+
+		applyForceToActor(actor, 2 * forceVector);
+
+		//move our spheres out of collision
+		vec3 seperationVector = collisionNormal * intersection * .50f;
+		m_position += seperationVector;
+		actor->m_position -= seperationVector;
+
+
+		std::cout << "Colliding with: SPHERE!" << " ID:" << m_id << "\n";
 		return true;
 	}
 	
@@ -306,7 +333,10 @@ bool RigidBody::SPHEREvsPLANE(RigidBody* actor)
 	{
 		//set sphere velocity to zero here:
 		std::cout << "Collision with plane has occured";
+		return true;
 	}
+
+	return false;
 
 }
 
@@ -330,8 +360,12 @@ bool RigidBody::AABBvsPLANE(RigidBody* actor)
 	{
 		//set cube velocity to zero here:
 		std::cout << "Collision with plane has occured";
+		return true;
 	}
 
+	return false;
 }
 
 #pragma endregion
+
+

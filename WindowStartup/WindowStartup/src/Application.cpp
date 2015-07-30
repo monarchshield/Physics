@@ -60,9 +60,11 @@ Application::Application()
 	}
 
 	m_physics = new Physx1();
-	m_particleEmitter = new PhysxFluid(m_physics);
+	//m_particleEmitter = new PhysxFluid(m_physics);
+	m_RagDoll = new RagDoll(m_physics);
 
 	m_skybox = new Skybox();
+
 	//m_RigidSphere = new RigidBody(vec3(0, 14, 0), vec3(.5f, 0, 0), 2, 10);
 	//m_RigidSphere1 = new RigidBody(vec3(0, 14, 0), vec3(0, 0, 0), 2, 10);
 	
@@ -196,7 +198,7 @@ void Application::Update()
 	//
 	//}
 
-	m_particleEmitter->Update(m_DeltaTime);
+	//m_particleEmitter->Update(m_DeltaTime);
 
 	//m_RigidSphere->Update(m_DeltaTime);
 	m_physics->Update(m_DeltaTime);

@@ -147,7 +147,7 @@ void Physx1::Draw()
 void Physx1::setUpTutorial()
 {
 	//add a plane
-	PxTransform pose = PxTransform(PxVec3(0, 5, 0), PxQuat(PxHalfPi * 1.0f, PxVec3(0, 0, 1)));
+	PxTransform pose = PxTransform(PxVec3(0, 0, 0), PxQuat(PxHalfPi * 1.0f, PxVec3(0, 0, 1)));
 	PxRigidStatic* plane = PxCreateStatic(*m_Physics, pose, PxPlaneGeometry(), *m_PhysicsMaterial);
 
 	//add it to the physx scene

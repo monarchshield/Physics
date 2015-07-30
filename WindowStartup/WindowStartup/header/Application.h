@@ -15,7 +15,7 @@
 #include <RigidBody.h>
 #include "Entity.h"
 #include "PhysxFluid.h"
-
+#include "Ragdoll.h"
 
 class Texture;
 class ProceduralGen;
@@ -53,6 +53,7 @@ private:
 
 	RigidBody* m_RigidSphere;
 	RigidBody* m_RigidSphere1;
+	RagDoll* m_RagDoll;
 
 	PhysxFluid* m_particleEmitter;
 

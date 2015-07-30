@@ -27,7 +27,8 @@ PhysxFluid::PhysxFluid(Physx1* physics) : g_Physics(physics)
 	pf->setRestitution(0);
 	
 	pf->setParticleBaseFlag(PxParticleBaseFlag::eCOLLISION_TWOWAY, true);
-	pf->setStiffness(100);
+	pf->setStiffness(100);
+
 	if(pf)
 	{
 		g_Physics->m_PhysicsScene->addActor(*pf);
@@ -51,7 +52,8 @@ void PhysxFluid::SetUpScene()
 	PxRigidStatic* plane = PxCreateStatic(*g_Physics->m_Physics, pose, PxPlaneGeometry(), *g_Physics->m_PhysicsMaterial);
 	
 	
-
+
+
 	//g_PhysicsMaterial we created with the first tutorial so review on that.
 	const PxU32 numShapes = plane->getNbShapes();
 	//g_Physics->m_PhysicsScene->addActor(*plane);

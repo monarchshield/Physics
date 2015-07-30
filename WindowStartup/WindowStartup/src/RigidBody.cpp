@@ -61,18 +61,20 @@ void RigidBody::Update(float deltatime)
 
 	m_deltatime = deltatime;
 
-	m_position -= m_gravity * deltatime * m_timestep;
+	//m_position -= m_gravity * deltatime * m_timestep;
 	
 	
 	m_force = m_mass * m_acceleration;
 	m_acceleration = m_force / m_mass;
 
 	m_velocity += m_acceleration * deltatime * m_timestep;
+	m_position += m_velocity;
+	
 
 	if (m_id == 0)
 	std::cout << "Current Velocity: " << m_velocity.x << "," << m_velocity.y << "," << m_velocity.z << "\n";
 	
-	m_position += m_velocity;
+	
 
 
 

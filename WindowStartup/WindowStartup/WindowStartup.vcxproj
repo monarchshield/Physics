@@ -95,6 +95,7 @@
     <ClCompile Include="src\ParticleFluidEmitter.cpp" />
     <ClCompile Include="src\Physx1.cpp" />
     <ClCompile Include="src\PhysxFluid.cpp" />
+    <ClCompile Include="src\Ragdoll.cpp" />
     <ClCompile Include="src\RigidBody.cpp" />
     <ClCompile Include="src\Skybox.cpp" />
   </ItemGroup>
@@ -107,6 +108,7 @@
     <ClInclude Include="header\ParticleFluidEmitter.h" />
     <ClInclude Include="header\Physx1.h" />
     <ClInclude Include="header\PhysxFluid.h" />
+    <ClInclude Include="header\Ragdoll.h" />
     <ClInclude Include="header\RigidBody.h" />
     <ClInclude Include="header\Skybox.h" />
     <ClInclude Include="src\Gizmos.h" />

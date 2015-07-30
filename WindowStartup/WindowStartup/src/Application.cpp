@@ -59,7 +59,8 @@ Application::Application()
 		return;
 	}
 
-
+	m_physics = new Physx1();
+	m_particleEmitter = new PhysxFluid(m_physics);
 
 	m_skybox = new Skybox();
 	//m_RigidSphere = new RigidBody(vec3(0, 14, 0), vec3(.5f, 0, 0), 2, 10);
@@ -89,7 +90,7 @@ Application::Application()
 
 	Gizmos::create();
 	
-	m_physics = new Physx1();
+
 
 	
 	for (unsigned int i = 0; i < 10; i++)
@@ -160,8 +161,8 @@ void Application::RunGame()
 void Application::Update()
 {
 
-
-	
+	Gizmos::clear();
+	//Gizmos::clear();
 
 	m_currentTime = (float)glfwGetTime();
 	m_DeltaTime = m_currentTime - m_previousTime;
@@ -180,24 +181,25 @@ void Application::Update()
 	//	
 	//}
 
-	for (unsigned int i = 0; i < m_rigidbodies.size(); i++)
-	{
-		m_rigidbodies[i]->Update(m_DeltaTime);
+	//for (unsigned int i = 0; i < m_rigidbodies.size(); i++)
+	//{
+	//	m_rigidbodies[i]->Update(m_DeltaTime);
+	//
+	//	for (unsigned int j = 0; j < m_rigidbodies.size(); j++)
+	//	{
+	//		if (i == j)
+	//			break;
+	//	
+	//		else
+	//			m_rigidbodies[i]->CheckCollision(m_rigidbodies[j]);
+	//	}
+	//
+	//}
 
-		for (unsigned int j = 0; j < m_rigidbodies.size(); j++)
-		{
-			if (i == j)
-				break;
-		
-			else
-				m_rigidbodies[i]->CheckCollision(m_rigidbodies[j]);
-		}
-
-	}
-
+	m_particleEmitter->Update(m_DeltaTime);
 
 	//m_RigidSphere->Update(m_DeltaTime);
-	//m_physics->Update(m_DeltaTime);
+	m_physics->Update(m_DeltaTime);
 
 	camera->update(m_DeltaTime);
 	camera->getWorldTransform();
@@ -206,18 +208,20 @@ void Application::Update()
 void Application::Draw()
 {
 
-	Gizmos::clear();
-	Gizmos::addAABBFilled(vec3(0,2,0), vec3(250, 1, 250), vec4(0, 0, 1, 1), nullptr);
+
+	//Gizmos::addAABBFilled(vec3(0,2,0), vec3(250, 1, 250), vec4(0, 0, 1, 1), nullptr);
 	//Gizmos::addAABB(vec3(0, 35, 0), vec3(15, 15, 15), vec4(0, 1, 0, 1), nullptr);
 	//m_RigidSphere->Draw();
 
-	for (unsigned int i = 0; i < m_rigidbodies.size(); i++)
-	{
-		m_rigidbodies[i]->Draw();
-	}
+	//for (unsigned int i = 0; i < m_rigidbodies.size(); i++)
+	//{
+	//	m_rigidbodies[i]->Draw();
+	//}
 
 
-	//m_physics->Draw();
+
+
+	m_physics->Draw();
 
 	//m_skybox->Draw(camera);
 	//for (unsigned int i = 0; i < m_entities.size(); i++)

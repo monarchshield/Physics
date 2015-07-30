@@ -39,7 +39,14 @@ public:
 	void setUpTutorial();
 	void MakeBlocks();
 	void Draw(); //Lol use gizmos for this
+	
+	PxMaterial* m_PhysicsMaterial;
+	PxScene* m_PhysicsScene;
+	PxPhysics* m_Physics;
+	std::vector<PxRigidDynamic*>m_boxActors;
 
+protected:
+	
 
 private:
 
@@ -49,7 +56,7 @@ private:
 	//Creating a box;
 	//-------------------------
 
-	std::vector<PxRigidDynamic*>m_boxActors;
+	
 	PxBoxGeometry* m_box;
 	PxRigidDynamic* m_dynamicActor;
 	PxTransform* m_transform;
@@ -60,12 +67,12 @@ private:
 
 
 	PxFoundation* m_PhysicsFoundation;
-	PxPhysics* m_Physics;
-	PxScene* m_PhysicsScene;
+	
+	
 	PxDefaultErrorCallback m_defaultErrorCallback;
 	PxDefaultAllocator m_DefaultAllocatorCallback;
 	PxSimulationFilterShader m_defaultFilterShader = PxDefaultSimulationFilterShader;
-	PxMaterial* m_PhysicsMaterial;
+	
 	PxMaterial* m_boxMaterial;
 	PxCooking* m_PhysicsCooker;
 

@@ -91,7 +91,10 @@
     <ClCompile Include="src\Gizmos_fix.cpp" />
     <ClCompile Include="src\gl_core_4_4.c" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\ParticleEmitter.cpp" />
+    <ClCompile Include="src\ParticleFluidEmitter.cpp" />
     <ClCompile Include="src\Physx1.cpp" />
+    <ClCompile Include="src\PhysxFluid.cpp" />
     <ClCompile Include="src\RigidBody.cpp" />
     <ClCompile Include="src\Skybox.cpp" />
   </ItemGroup>
@@ -100,7 +103,10 @@
     <ClInclude Include="header\Camera.h" />
     <ClInclude Include="header\Entity.h" />
     <ClInclude Include="header\FlyCamera.h" />
+    <ClInclude Include="header\ParticleEmitter.h" />
+    <ClInclude Include="header\ParticleFluidEmitter.h" />
     <ClInclude Include="header\Physx1.h" />
+    <ClInclude Include="header\PhysxFluid.h" />
     <ClInclude Include="header\RigidBody.h" />
     <ClInclude Include="header\Skybox.h" />
     <ClInclude Include="src\Gizmos.h" />

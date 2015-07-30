@@ -14,7 +14,7 @@
 #include "Physx1.h"
 #include <RigidBody.h>
 #include "Entity.h"
-
+#include "PhysxFluid.h"
 
 
 class Texture;
@@ -54,6 +54,7 @@ private:
 	RigidBody* m_RigidSphere;
 	RigidBody* m_RigidSphere1;
 
+	PhysxFluid* m_particleEmitter;
 
 	std::vector<RigidBody*> m_rigidbodies;
 	std::vector<Entity*> m_entities;

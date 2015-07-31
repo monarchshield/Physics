@@ -116,7 +116,7 @@ private:
 	//-------------------------
 	vec3 m_velocity;
 	vec3 m_gravity;
-	//vec3 m_acceleration;
+	vec3 m_acceleration;
 	vec3 m_normal;
 
 	vec3 m_force;

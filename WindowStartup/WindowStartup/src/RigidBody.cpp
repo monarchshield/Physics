@@ -62,6 +62,7 @@ void RigidBody::Update(float deltatime)
 {
 
 #pragma region SCRATCHFORCES
+	m_deltatime = deltatime;
 	//m_position -= m_gravity * deltatime * m_timestep;
 	//m_force = m_mass * m_acceleration;
 	//m_acceleration = m_force / m_mass;
@@ -69,7 +70,8 @@ void RigidBody::Update(float deltatime)
 	//m_velocity += m_acceleration * deltatime * m_timestep;
 #pragma endregion
 
-	m_deltatime = deltatime;
+	m_acceleration = m_velocity / m_mass;
+	m_velocity = m_acceleration * m_mass;
 	m_position += m_velocity * deltatime * m_timestep;
 	
 
@@ -303,7 +305,7 @@ bool RigidBody::SPHEREvsSPHERE(RigidBody* actor)
 		vec3 collisionVector = collisionNormal *(glm::dot(relativeVelocity, collisionNormal));
 		vec3 forceVector = collisionVector * 1.0f / (1 / m_mass + 1 / actor->GetMass());
 
-		applyForceToActor(actor, 1 * forceVector);
+		applyForceToActor(actor, 1 * forceVector); // the 1* should really be *2
 
 		//move our spheres out of collision
 		vec3 seperationVector = collisionNormal * intersection * .50f;

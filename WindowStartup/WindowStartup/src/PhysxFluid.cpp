@@ -11,7 +11,7 @@ PhysxFluid::PhysxFluid(Physx1* physics) : g_Physics(physics)
 	//Create particle system in Physx SDK
 	//set immutable properties
 	
-	PxU32 maxParticles = 400;
+	PxU32 maxParticles = 4000;
 	bool perParticleRestOffset = false;
 
 
@@ -32,7 +32,7 @@ PhysxFluid::PhysxFluid(Physx1* physics) : g_Physics(physics)
 	if(pf)
 	{
 		g_Physics->m_PhysicsScene->addActor(*pf);
-		m_particleEmitter = new ParticleFluidEmitter(maxParticles, PxVec3(0, 7, 0), pf, .01);
+		m_particleEmitter = new ParticleFluidEmitter(maxParticles, PxVec3(0, 7, 0), pf, .1);
 		m_particleEmitter->setStartVelocityRange(-2.0f, 0, -2.0f, 2.0f, 0.0f, 2.0f);
 	}
 	
@@ -63,25 +63,25 @@ void PhysxFluid::SetUpScene()
 
 	PxBoxGeometry side1(4.5, 1, .5);
 	PxBoxGeometry side2(.5, 1, 4.5);
-	pose = PxTransform(PxVec3(0.0f, 5.5, 4.0));
+	pose = PxTransform(PxVec3(0.0f, 0, 4.0));
 
 	PxRigidStatic*box = PxCreateStatic(*g_Physics->m_Physics, pose, side1, *g_Physics->m_PhysicsMaterial);
 	g_Physics->m_PhysicsScene->addActor(*box);
 	g_PhysXActors.push_back(box);
 	
 	
-	pose = PxTransform(PxVec3(0.0f, 5.5, -4.0f));
+	pose = PxTransform(PxVec3(0.0f, 0, -4.0f));
 	box = PxCreateStatic(*g_Physics->m_Physics, pose, side1, *g_Physics->m_PhysicsMaterial);
 	
 	g_Physics->m_PhysicsScene->addActor(*box);
 	g_PhysXActors.push_back(box);
 	
-	pose = PxTransform(PxVec3(4.0f, 5.5, 0));
+	pose = PxTransform(PxVec3(4.0f, 0, 0));
 	box = PxCreateStatic(*g_Physics->m_Physics, pose, side2, *g_Physics->m_PhysicsMaterial);
 	g_Physics->m_PhysicsScene->addActor(*box);
 	g_PhysXActors.push_back(box);
 	
-	pose = PxTransform(PxVec3(-4.0f, 5.5, 0));
+	pose = PxTransform(PxVec3(-4.0f, 0, 0));
 	box = PxCreateStatic(*g_Physics->m_Physics, pose, side2, *g_Physics->m_PhysicsMaterial);
 	g_Physics->m_PhysicsScene->addActor(*box);
 	g_PhysXActors.push_back(box);

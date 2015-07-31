@@ -59,16 +59,24 @@ Application::Application()
 		return;
 	}
 
+
+
+	
+
+
 	m_physics = new Physx1();
-	//m_particleEmitter = new PhysxFluid(m_physics);
+	m_particleEmitter = new PhysxFluid(m_physics);
 	m_RagDoll = new RagDoll(m_physics);
+	m_player = new KinematicController(1, 1, vec3(0, 10, 0), m_physics);
 
 	m_skybox = new Skybox();
 
-	//m_RigidSphere = new RigidBody(vec3(0, 14, 0), vec3(.5f, 0, 0), 2, 10);
-	//m_RigidSphere1 = new RigidBody(vec3(0, 14, 0), vec3(0, 0, 0), 2, 10);
+
+
+	//Create the layer controller
 	
-	m_rigidbodies.push_back(new RigidBody(vec3(0, 14, 0), vec3(.5f, 0, 0), 2, 10));
+	
+	m_rigidbodies.push_back(new RigidBody(vec3(0, 14, 0), vec3(50.0f, 0, 0), 2, 10));
 	m_rigidbodies[0]->SetID(0);
 
 	m_rigidbodies.push_back(new RigidBody(vec3(100, 14, 0), vec3(0, 0, 0), 2, 10));
@@ -77,10 +85,10 @@ Application::Application()
 
 	for (unsigned int i = 0; i < m_rigidbodies.size(); i++)
 	{
-		m_rigidbodies[i]->SetTimeStep(.1f);
-
-
-
+		m_rigidbodies[i]->SetTimeStep(.5f);
+	
+	
+	
 		if (i = 1)
 			m_rigidbodies[i]->SetColour(vec4(0, 1, 0, 1));
 	}
@@ -183,25 +191,29 @@ void Application::Update()
 	//	
 	//}
 
-	//for (unsigned int i = 0; i < m_rigidbodies.size(); i++)
-	//{
-	//	m_rigidbodies[i]->Update(m_DeltaTime);
-	//
-	//	for (unsigned int j = 0; j < m_rigidbodies.size(); j++)
-	//	{
-	//		if (i == j)
-	//			break;
-	//	
-	//		else
-	//			m_rigidbodies[i]->CheckCollision(m_rigidbodies[j]);
-	//	}
-	//
-	//}
+#pragma region UpdateMyPhysics
+	for (unsigned int i = 0; i < m_rigidbodies.size(); i++)
+	{
+		m_rigidbodies[i]->Update(m_DeltaTime);
+	
+		for (unsigned int j = 0; j < m_rigidbodies.size(); j++)
+		{
+			if (i == j)
+				break;
+		
+			else
+				m_rigidbodies[i]->CheckCollision(m_rigidbodies[j]);
+		}
+	
+	}
+#pragma endregion
+	
+#pragma region PhysxUpdate
 
+	//Physx stuff!
 	//m_particleEmitter->Update(m_DeltaTime);
-
-	//m_RigidSphere->Update(m_DeltaTime);
-	m_physics->Update(m_DeltaTime);
+	//m_physics->Update(m_DeltaTime);
+#pragma endregion
 
 	camera->update(m_DeltaTime);
 	camera->getWorldTransform();
@@ -210,20 +222,23 @@ void Application::Update()
 void Application::Draw()
 {
 
+#pragma region MyPhysics
+	Gizmos::addAABBFilled(vec3(0,2,0), vec3(250, 1, 250), vec4(0, 0, 1, 1), nullptr);
+	Gizmos::addAABB(vec3(0, 35, 0), vec3(15, 15, 15), vec4(0, 1, 0, 1), nullptr);
+	
+	for (unsigned int i = 0; i < m_rigidbodies.size(); i++)
+	{
+		m_rigidbodies[i]->Draw();
+	}
+#pragma endregion
 
-	//Gizmos::addAABBFilled(vec3(0,2,0), vec3(250, 1, 250), vec4(0, 0, 1, 1), nullptr);
-	//Gizmos::addAABB(vec3(0, 35, 0), vec3(15, 15, 15), vec4(0, 1, 0, 1), nullptr);
-	//m_RigidSphere->Draw();
+#pragma region PhysX stuff
+	//m_physics->Draw();
+	//m_player->Draw();
+#pragma endregion
 
-	//for (unsigned int i = 0; i < m_rigidbodies.size(); i++)
-	//{
-	//	m_rigidbodies[i]->Draw();
-	//}
-
-
-
-
-	m_physics->Draw();
+	//Gizmos::addSphere(vec3(0,0,0), 5, 5, 10, vec4(1, 0, 0, 1));
+	
 
 	//m_skybox->Draw(camera);
 	//for (unsigned int i = 0; i < m_entities.size(); i++)

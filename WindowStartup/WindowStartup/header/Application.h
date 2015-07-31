@@ -16,6 +16,7 @@
 #include "Entity.h"
 #include "PhysxFluid.h"
 #include "Ragdoll.h"
+#include "KinematicController.h"
 
 class Texture;
 class ProceduralGen;
@@ -50,7 +51,7 @@ private:
 	float m_DeltaTime;
 	float m_cooldown;
 
-
+	KinematicController* m_player;
 	RigidBody* m_RigidSphere;
 	RigidBody* m_RigidSphere1;
 	RagDoll* m_RagDoll;

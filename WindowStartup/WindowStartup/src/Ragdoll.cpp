@@ -32,7 +32,7 @@ RagDoll::RagDoll(Physx1* physics) : m_physics(physics)
 #pragma endregion
 	PxArticulation* ragdollArticulation;
 
-	ragdollArticulation = makeRagdoll(m_physics->m_Physics, ragdollData, PxTransform(PxVec3(0, 3, 0)), .1f, m_physicsMaterial);
+	ragdollArticulation = makeRagdoll(m_physics->m_Physics, ragdollData, PxTransform(PxVec3(0, 5, 0)), .1f, m_physicsMaterial);
 
 	m_physics->m_PhysicsScene->addArticulation(*ragdollArticulation);
 }
@@ -140,6 +140,9 @@ PxArticulation* RagDoll::makeRagdoll(PxPhysics* m_phyiscs, RagdollNode** nodeArr
 			//sets the child constraint frame (this the constraint frame of the newly added link)
 			PxTransform thisConstraintFrame = PxTransform(PxVec3(currentNodePtr->childLinkPos * childHalfLength, 0, 0));
 
+
+			joint->setParentPose(parentConstraintFrame);
+			joint->setChildPose(thisConstraintFrame);
 			//set up the poses for the joint so it is in the correct place
 			joint->setStiffness(20);
 			joint->setDamping(20);

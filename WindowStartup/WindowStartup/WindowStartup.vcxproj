@@ -90,6 +90,7 @@
     <ClCompile Include="src\FlyCamera.cpp" />
     <ClCompile Include="src\Gizmos_fix.cpp" />
     <ClCompile Include="src\gl_core_4_4.c" />
+    <ClCompile Include="src\KinematicController.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\ParticleEmitter.cpp" />
     <ClCompile Include="src\ParticleFluidEmitter.cpp" />
@@ -104,6 +105,7 @@
     <ClInclude Include="header\Camera.h" />
     <ClInclude Include="header\Entity.h" />
     <ClInclude Include="header\FlyCamera.h" />
+    <ClInclude Include="header\KinematicController.h" />
     <ClInclude Include="header\ParticleEmitter.h" />
     <ClInclude Include="header\ParticleFluidEmitter.h" />
     <ClInclude Include="header\Physx1.h" />

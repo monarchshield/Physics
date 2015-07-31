@@ -3,10 +3,11 @@
 #pragma region Overload Constructors()
 
 //RigidBody Sphere:
-RigidBody::RigidBody(vec3 position, vec3 acceleration, float mass, float radius)
+RigidBody::RigidBody(vec3 position, vec3  velocity, float mass, float radius)
 {
 	m_position = position;
-	m_acceleration = acceleration;
+	m_velocity = velocity;
+	//m_acceleration = acceleration;
 	m_mass = mass;
 	m_radius = radius;
 	m_gravity = vec3(0, 0, 0);
@@ -17,10 +18,11 @@ RigidBody::RigidBody(vec3 position, vec3 acceleration, float mass, float radius)
 }
 
 //RigidBody AABB:
-RigidBody::RigidBody(vec3 position, vec3 acceleration, float mass, float width, float length, float height)
+RigidBody::RigidBody(vec3 position, vec3  velocity, float mass, float width, float length, float height)
 {
 	m_position = position;
-	m_acceleration = acceleration;
+	m_velocity = velocity;
+	//m_acceleration = acceleration;
 	m_width = width;
 	m_height = height;
 	m_length = length;
@@ -36,7 +38,7 @@ RigidBody::RigidBody(vec3 position, vec3 normal)
 {
 	
 	m_position = position;
-	m_acceleration = vec3(0,0,0);
+	//m_acceleration = vec3(0,0,0);
 	m_normal = normal;
 	m_mass = 0;
 	m_width = 0;
@@ -59,16 +61,16 @@ RigidBody::~RigidBody()
 void RigidBody::Update(float deltatime)
 {
 
-	m_deltatime = deltatime;
-
+#pragma region SCRATCHFORCES
 	//m_position -= m_gravity * deltatime * m_timestep;
-	
-	
-	m_force = m_mass * m_acceleration;
-	m_acceleration = m_force / m_mass;
+	//m_force = m_mass * m_acceleration;
+	//m_acceleration = m_force / m_mass;
+	//
+	//m_velocity += m_acceleration * deltatime * m_timestep;
+#pragma endregion
 
-	m_velocity += m_acceleration * deltatime * m_timestep;
-	m_position += m_velocity;
+	m_deltatime = deltatime;
+	m_position += m_velocity * deltatime * m_timestep;
 	
 
 	if (m_id == 0)
@@ -87,8 +89,8 @@ void RigidBody::debug()
 
 void RigidBody::applyForce(vec3 force)
 {
-	m_acceleration += force / m_mass;
-	m_velocity += m_acceleration * m_deltatime * m_timestep;
+	m_velocity += force;
+	m_position += m_velocity * m_deltatime * m_timestep;
 	
 }
 
@@ -301,7 +303,7 @@ bool RigidBody::SPHEREvsSPHERE(RigidBody* actor)
 		vec3 collisionVector = collisionNormal *(glm::dot(relativeVelocity, collisionNormal));
 		vec3 forceVector = collisionVector * 1.0f / (1 / m_mass + 1 / actor->GetMass());
 
-		applyForceToActor(actor, 2 * forceVector);
+		applyForceToActor(actor, 1 * forceVector);
 
 		//move our spheres out of collision
 		vec3 seperationVector = collisionNormal * intersection * .50f;

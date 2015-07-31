@@ -27,13 +27,13 @@ class RigidBody
 public:
 
 	//Overload Constructor
-	RigidBody(vec3 position, vec3 acceleration, float mass);
-								
-	//RigidBody Sphere:			  
-	RigidBody(vec3 position, vec3 acceleration, float mass, float radius);
+	RigidBody(vec3 position, vec3 velocity, float mass);
 								 
-	//RigidBody AABB:			  
-	RigidBody(vec3 position, vec3 acceleration, float mass, float width, float length, float height);
+	//RigidBody Sphere:		
+	RigidBody(vec3 position, vec3 velocity, float mass, float radius);
+								
+	//RigidBody AABB:			
+	RigidBody(vec3 position, vec3 velocity, float mass, float width, float length, float height);
 								 
 	//RigidBody Plane:			  
 	RigidBody(vec3 position, vec3 normal);
@@ -116,7 +116,7 @@ private:
 	//-------------------------
 	vec3 m_velocity;
 	vec3 m_gravity;
-	vec3 m_acceleration;
+	//vec3 m_acceleration;
 	vec3 m_normal;
 
 	vec3 m_force;

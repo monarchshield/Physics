@@ -51,7 +51,8 @@ public:
 
 	//Collision Detection Functions
 	bool AABBvsAABB(RigidBody* actor);				 //In progress!
-	bool AABBvsSPHERE(RigidBody* actor);			 //Not completed yet!
+	bool AABBvsSPHERE(RigidBody* actor);			 //Finished
+	bool SPHEREvsAABB(RigidBody* actor);			 //Finished
 	bool AABBvsPLANE(RigidBody* actor);				 //Finished!
 	bool SPHEREvsSPHERE(RigidBody* actor);			 //Completed!
 	bool SPHEREvsPLANE(RigidBody* actor);			 //Done!

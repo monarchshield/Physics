@@ -79,9 +79,11 @@ Application::Application()
 	m_rigidbodies.push_back(new RigidBody(vec3(0, 14, 0), vec3(50.0f, 0, 0), 2, 10));
 	m_rigidbodies[0]->SetID(0);
 
-	m_rigidbodies.push_back(new RigidBody(vec3(100, 14, 0), vec3(0, 0, 0), 2, 10));
-	m_rigidbodies[1]->SetID(1);
+	//m_rigidbodies.push_back(new RigidBody(vec3(100, 14, 0), vec3(0, 0, 0), 2, 10));
+	//m_rigidbodies[1]->SetID(1);
 
+	m_rigidbodies.push_back(new RigidBody(vec3(100,14,0),vec3(0,0,0),5.0f,5,5,5));
+	m_rigidbodies[1]->SetID(1);
 
 	for (unsigned int i = 0; i < m_rigidbodies.size(); i++)
 	{

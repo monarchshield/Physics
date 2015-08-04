@@ -3,13 +3,8 @@
 #pragma region Overload Constructors()
 
 //RigidBody Sphere:
-RigidBody::RigidBody(vec3 position, vec3  velocity, float mass, float radius)
+RigidBody::RigidBody(vec3 position, vec3  velocity, float mass, float radius) : m_position(position), m_velocity(velocity), m_mass(mass), m_radius(radius)
 {
-	m_position = position;
-	m_velocity = velocity;
-	//m_acceleration = acceleration;
-	m_mass = mass;
-	m_radius = radius;
 	m_gravity = vec3(0, 0, 0);
 	m_shapeID = ShapeType::SPHERE;
 	m_state = RigidBodyState::AWAKE;
@@ -19,13 +14,8 @@ RigidBody::RigidBody(vec3 position, vec3  velocity, float mass, float radius)
 
 //RigidBody AABB:
 RigidBody::RigidBody(vec3 position, vec3  velocity, float mass, float width, float length, float height)
+	: m_position(position), m_velocity(velocity), m_width(width), m_height(height), m_length(length), m_mass(mass)
 {
-	m_position = position;
-	m_velocity = velocity;
-	//m_acceleration = acceleration;
-	m_width = width;
-	m_height = height;
-	m_length = length;
 	m_gravity = vec3(0, 0, 0);
 	m_shapeID = ShapeType::BOX;
 	m_state = RigidBodyState::AWAKE;
@@ -34,12 +24,10 @@ RigidBody::RigidBody(vec3 position, vec3  velocity, float mass, float width, flo
 }
 
 //RigidBody Plane:
-RigidBody::RigidBody(vec3 position, vec3 normal)
+RigidBody::RigidBody(vec3 position, vec3 normal) : m_position(position), m_normal(normal)
 {
 	
-	m_position = position;
-	//m_acceleration = vec3(0,0,0);
-	m_normal = normal;
+
 	m_mass = 0;
 	m_width = 0;
 	m_length = 0;
@@ -77,11 +65,6 @@ void RigidBody::Update(float deltatime)
 
 	if (m_id == 0)
 	std::cout << "Current Velocity: " << m_velocity.x << "," << m_velocity.y << "," << m_velocity.z << "\n";
-	
-	
-
-
-
 }
 
 void RigidBody::debug()
@@ -107,57 +90,42 @@ void RigidBody::CheckCollision(RigidBody* actor)
 
 	switch (m_shapeID)
 	{
-		case PLANE:
+		case SPHERE:
+		{
+			 switch (_id)
+			 {
+			 case PLANE:
+			   SPHEREvsPLANE(actor);
+			   break;
+
+			 case SPHERE:
+			   SPHEREvsSPHERE(actor);
+			   break;
+
+			 case BOX:
+				 SPHEREvsAABB(actor);
+			   break;
+			 }
+		}
+		break;
+
+		case BOX:
 		{
 			switch (_id)
 			{
 			case PLANE:
-			  break;
+				AABBvsPLANE(actor);
+				break;
 
 			case SPHERE:
-			  break;
+				AABBvsSPHERE(actor);
+				break;
 
 			case BOX:
-			  break;
+				AABBvsAABB(actor);
+				break;
 			}
 		}
-		break;
-
-	case SPHERE:
-	{
-		 switch (_id)
-		 {
-		 case PLANE:
-		   SPHEREvsPLANE(actor);
-		   break;
-
-		 case SPHERE:
-		   SPHEREvsSPHERE(actor);
-		   break;
-
-		 case BOX:
-
-		   break;
-		 }
-	}
-		break;
-
-	case BOX:
-	{
-		switch (_id)
-		{
-		case PLANE:
-			AABBvsPLANE(actor);
-			break;
-
-		case SPHERE:
-			break;
-
-		case BOX:
-			AABBvsAABB(actor);
-			break;
-		}
-	}
 		break;
 
 	default:
@@ -370,6 +338,83 @@ bool RigidBody::AABBvsPLANE(RigidBody* actor)
 	}
 
 	return false;
+}
+
+bool RigidBody::AABBvsSPHERE(RigidBody* actor)
+{
+	
+	
+	// First, compute the distance between the centers 
+	glm::vec3 SepAxis = actor->GetPosition() - GetPosition();
+	float Dist = glm::length(SepAxis);
+	
+	// then, find the unit vector that points from the box center to the sphere center
+	glm::normalize(SepAxis);
+
+	// divide each component of the unit vector by the maximum component, effectively "normalizing" the unit vector
+	if (SepAxis.x >= SepAxis.y && SepAxis.x >= SepAxis.z)
+		SepAxis /= SepAxis.x;
+	else if (SepAxis.y >= SepAxis.x && SepAxis.y >= SepAxis.z)
+		SepAxis /= SepAxis.y;
+	else
+		SepAxis /= SepAxis.z;
+
+	// Now, find the effective radius of the box along the "normalized" unit vector pointing to the sphere
+	SepAxis.x *= GetWidth() / 2.0f;
+	SepAxis.y *= GetHeight() / 2.0f;
+	SepAxis.z *= GetLength() / 2.0f;
+
+	float Dist2 = glm::length(SepAxis);
+
+	// Finally, add the sphere radius to the box radius and compare to the distance
+	if (Dist <= (actor->GetRadius() + Dist2))
+	{
+		std::cout << "Collision with Sphere Occured:";
+		return true;
+	}
+
+	else
+		return false;
+
+
+}
+
+bool RigidBody::SPHEREvsAABB(RigidBody* actor)
+{
+
+
+	// First, compute the distance between the centers 
+	glm::vec3 SepAxis = GetPosition() - actor->GetPosition();
+	float Dist = glm::length(SepAxis);
+
+	// then, find the unit vector that points from the box center to the sphere center
+	glm::normalize(SepAxis);
+
+	// divide each component of the unit vector by the maximum component, effectively "normalizing" the unit vector
+	if (SepAxis.x >= SepAxis.y && SepAxis.x >= SepAxis.z)
+		SepAxis /= SepAxis.x;
+	else if (SepAxis.y >= SepAxis.x && SepAxis.y >= SepAxis.z)
+		SepAxis /= SepAxis.y;
+	else
+		SepAxis /= SepAxis.z;
+
+	// Now, find the effective radius of the box along the "normalized" unit vector pointing to the sphere
+	SepAxis.x *= actor->GetWidth() / 2.0f;
+	SepAxis.y *= actor->GetHeight() / 2.0f;
+	SepAxis.z *= actor->GetLength() / 2.0f;
+
+	float Dist2 = glm::length(SepAxis);
+
+	// Finally, add the sphere radius to the box radius and compare to the distance
+	if (Dist <= (GetRadius() + Dist2))
+	{
+		std::cout << "Collision with Cube Occured:";
+		return true;
+	}
+	else
+		return false;
+
+
 }
 
 #pragma endregion
